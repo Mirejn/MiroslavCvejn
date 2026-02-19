@@ -9,6 +9,14 @@
   "visitCount": 0,
   "password": "admin123",
   "guestbook": [],
-  "posts": [],
+  "posts": [
+    {
+      "id": 1771508740261,
+      "title": "Čau",
+      "body": "ahoj",
+      "date": "19. února 2026",
+      "img": ""
+    }
+  ],
   "gallery": []
 }
