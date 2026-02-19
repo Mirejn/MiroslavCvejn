@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Vítejte na mém webu!</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { background-color: #c0c0c0; font-family: "Times New Roman", Times, serif; color: #000; margin: 0; padding: 0; }
+
+        .container { width: 800px; margin: 20px auto; background: #fff; border: 3px ridge #808080; }
+
+        .header { background-color: #000080; color: #ffff00; padding: 20px; text-align: center; border-bottom: 5px solid #ff0000; position: relative; }
+        .header h1 { margin: 0; font-size: 36px; text-shadow: 2px 2px #ff0000; cursor: pointer; user-select: none; }
+        .header .admin-hint { position: absolute; bottom: 3px; right: 8px; font-size: 9px; color: #000060; opacity: 0.3; }
+
+        .banner { background: linear-gradient(to right, #ff0000, #ffff00, #00ff00, #0000ff); height: 10px; }
+
+        .navbar { background-color: #808080; padding: 10px; text-align: center; border-bottom: 3px groove #000; }
+        .navbar a { color: #fff; text-decoration: none; margin: 0 4px; font-weight: bold; background-color: #000080; padding: 5px 10px; border: 2px outset #fff; cursor: pointer; display: inline-block; font-size: 13px; }
+        .navbar a:hover { background-color: #0000ff; border: 2px inset #fff; }
+        .navbar a.active { background-color: #0000cc; border: 2px inset #fff; }
+
+        marquee { background-color: #ffff00; padding: 8px; border: 2px solid #000; margin: 10px 0; }
+
+        .page { display: none; padding: 20px; }
+        .page.active { display: block; }
+        .page h2 { color: #ff0000; font-size: 26px; text-decoration: underline; }
+        .page h3 { color: #0000ff; font-size: 18px; }
+
+        hr { border: 3px ridge #808080; }
+        .box { border: 3px ridge #808080; background-color: #ffffcc; padding: 12px; margin: 12px 0; }
+        .table-box { border: 3px ridge #808080; background-color: #ccccff; padding: 10px; margin: 12px 0; }
+
+        .blink { animation: blinker 1s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
+
+        .footer { background-color: #808080; color: #fff; text-align: center; padding: 12px; border-top: 3px groove #000; font-size: 12px; }
+
+        .counter { background: #000; color: #00ff00; padding: 5px 12px; font-family: "Courier New", monospace; display: inline-block; border: 2px solid #00ff00; font-size: 20px; letter-spacing: 3px; }
+
+        ul { list-style-type: square; }
+        a { color: #0000ff; text-decoration: underline; cursor: pointer; }
+
+        .guestbook-entry { border: 3px ridge #808080; background-color: #ffffcc; padding: 10px; margin: 10px 0; }
+        .guestbook-entry .author { font-weight: bold; color: #000080; }
+        .guestbook-entry .date { font-size: 11px; color: #808080; }
+
+        .retro-input, .retro-textarea { border: 2px inset #808080; background: #fff; font-family: "Times New Roman", Times, serif; padding: 4px; font-size: 14px; }
+        .retro-btn { background-color: #c0c0c0; border: 2px outset #fff; padding: 5px 14px; font-family: "Times New Roman", Times, serif; cursor: pointer; font-size: 14px; }
+        .retro-btn:active { border: 2px inset #fff; }
+        .retro-btn.danger  { background-color: #ffaaaa; }
+        .retro-btn.primary { background-color: #aaaaff; }
+        .retro-btn.success { background-color: #aaffaa; }
+
+        .link-box { border: 3px ridge #808080; background-color: #ccffcc; padding: 10px; margin: 10px 0; }
+
+        .blog-post { border: 3px ridge #808080; margin: 15px 0; }
+        .blog-post-header { background-color: #000080; color: #fff; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; }
+        .blog-post-header .post-title { font-weight: bold; font-size: 16px; }
+        .blog-post-header .post-date  { font-size: 11px; color: #ccc; }
+        .blog-post-body { padding: 12px; }
+        .blog-post-body img { border: 3px ridge #808080; max-width: 100%; display: block; margin: 10px 0; max-height: 400px; object-fit: contain; }
+
+        .gallery-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+        .gallery-item { border: 3px ridge #808080; background-color: #ffffcc; padding: 5px; text-align: center; width: 175px; }
+        .gallery-item img { width: 163px; height: 130px; object-fit: cover; border: 2px inset #808080; display: block; }
+        .gallery-item .caption { font-size: 11px; margin-top: 4px; }
+
+        .about-photo { float: right; margin: 0 0 10px 15px; border: 3px ridge #808080; max-width: 200px; max-height: 250px; object-fit: cover; }
+        .clearfix::after { content: ""; display: table; clear: both; }
+
+        /* Loading */
+        #loading-bar { display: none; position: fixed; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #000080, #00ff00, #ff0000, #000080); background-size: 200%; animation: loadanim 1s linear infinite; z-index: 9999; }
+        @keyframes loadanim { 0%{background-position:0%} 100%{background-position:200%} }
+
+        /* Admin */
+        #admin-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 1000; overflow-y: auto; }
+        #admin-panel { width: 760px; margin: 20px auto 40px; background-color: #c0c0c0; border: 3px ridge #fff; }
+        .admin-titlebar { background: linear-gradient(to right, #000080, #0000ff); color: #fff; padding: 5px 10px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 14px; }
+        .admin-close-btn { background: #ff0000; color: white; border: 2px outset #ff8888; padding: 1px 8px; cursor: pointer; font-weight: bold; font-size: 14px; }
+        .admin-close-btn:active { border: 2px inset #ff8888; }
+
+        .admin-tabs { background-color: #808080; padding: 8px 8px 0; display: flex; gap: 3px; flex-wrap: wrap; }
+        .admin-tab { background-color: #c0c0c0; border: 2px outset #fff; border-bottom: none; padding: 4px 11px; cursor: pointer; font-size: 12px; }
+        .admin-tab.active { background-color: #fff; }
+
+        .admin-content { background: #fff; border: 2px inset #808080; margin: 0 8px 8px; padding: 14px; }
+        .admin-section { display: none; }
+        .admin-section.active { display: block; }
+        .admin-section > h3 { color: #000080; border-bottom: 2px solid #000080; padding-bottom: 4px; margin-top: 0; }
+
+        .admin-field { margin: 10px 0; }
+        .admin-field label { display: block; font-weight: bold; margin-bottom: 3px; font-size: 13px; }
+        .admin-field input[type=text], .admin-field input[type=password], .admin-field input[type=number], .admin-field textarea { width: 100%; padding: 5px; border: 2px inset #808080; background: #fff; font-family: "Times New Roman", Times, serif; font-size: 13px; }
+        .admin-field textarea { resize: vertical; }
+        .admin-field small { color: #666; font-size: 11px; display: block; margin-top: 2px; }
+
+        .admin-post-item { border: 2px ridge #808080; background: #eee; padding: 8px; margin: 6px 0; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+        .admin-post-item .post-info { flex: 1; }
+
+        .admin-gallery-grid { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+        .admin-gallery-item { border: 2px ridge #808080; background: #eee; padding: 5px; text-align: center; width: 115px; }
+        .admin-gallery-item img { width: 103px; height: 78px; object-fit: cover; display: block; border: 1px inset #808080; }
+
+        #admin-login-screen { padding: 30px; text-align: center; }
+        #admin-login-screen h2 { color: #000080; }
+        .login-box { border: 3px ridge #808080; background-color: #ffffcc; padding: 20px; display: inline-block; margin-top: 10px; text-align: left; max-width: 520px; width: 100%; }
+
+        .img-preview { max-width: 200px; max-height: 140px; border: 2px inset #808080; display: none; margin-top: 6px; }
+
+        .status-msg { padding: 6px 10px; margin: 8px 0; border: 2px solid; font-size: 13px; display: none; }
+        .status-msg.success { background: #ccffcc; border-color: #00aa00; color: #006600; }
+        .status-msg.error   { background: #ffcccc; border-color: #aa0000; color: #660000; }
+        .status-msg.info    { background: #cce5ff; border-color: #0066cc; color: #003388; }
+
+        .gh-info-box { background: #eeffee; border: 2px ridge #008800; padding: 12px; margin: 10px 0; font-size: 13px; }
+        .gh-info-box ol { margin: 6px 0; padding-left: 18px; }
+        .gh-info-box li { margin: 3px 0; }
+        .gh-info-box code { background: #fff; border: 1px solid #808080; padding: 1px 4px; font-size: 11px; }
+
+        .gh-status-box { padding: 8px 12px; margin: 8px 0; border: 2px solid; font-size: 13px; font-weight: bold; }
+        .gh-status-box.ok  { background: #ccffcc; border-color: #008800; color: #005500; }
+        .gh-status-box.err { background: #ffcccc; border-color: #880000; color: #550000; }
+        .gh-status-box.warn{ background: #ffffcc; border-color: #888800; color: #555500; }
+
+        .construction { text-align: center; margin: 20px 0; }
+    </style>
+</head>
+<body>
+<div id="loading-bar"></div>
+
+<div class="container">
+    <div class="header">
+        <h1 id="site-title">⭐ VÍTEJTE NA MÉM WEBU ⭐</h1>
+        <span class="admin-hint" title="3× klikněte pro admin">● ● ●</span>
+    </div>
+    <div class="banner"></div>
+    <div class="navbar">
+        <a onclick="showPage('home')"      id="nav-home"      class="active">DOMŮ</a>
+        <a onclick="showPage('about')"     id="nav-about">O MNĚ</a>
+        <a onclick="showPage('blog')"      id="nav-blog">BLOG</a>
+        <a onclick="showPage('gallery')"   id="nav-gallery">GALERIE</a>
+        <a onclick="showPage('links')"     id="nav-links">ODKAZY</a>
+        <a onclick="showPage('guestbook')" id="nav-guestbook">KNIHA</a>
+    </div>
+    <marquee behavior="scroll" direction="left" id="marquee-text">🌟 Stránky aktualizovány! 🌟 Nejlepší zobrazení v Netscape Navigator 3.0! 🌟</marquee>
+
+    <!-- DOMŮ -->
+    <div class="page active" id="page-home">
+        <h2>✦ Novinky ✦</h2>
+        <div class="box" id="home-welcome-box"><p><b><span class="blink">NOVÉ!</span></b> Vítejte na mých stránkách!</p></div>
+        <hr>
+        <h3>📌 Nejnovější příspěvky</h3>
+        <div id="home-latest-posts"><p><i>Načítám...</i></p></div>
+        <hr>
+        <div class="construction"><p><b>⚠️ STRÁNKY VE VÝSTAVBĚ ⚠️</b></p><p>Připravujeme další obsah...</p></div>
+        <hr>
+        <p><b>Počítadlo návštěv:</b> <span class="counter" id="visit-counter">000000</span></p>
+        <p><i id="last-updated-text">Poslední aktualizace: —</i></p>
+    </div>
+
+    <!-- O MNĚ -->
+    <div class="page" id="page-about">
+        <h2>👤 O mně</h2>
+        <div class="clearfix">
+            <img id="about-photo-img" class="about-photo" src="" style="display:none" alt="Profilovka">
+            <div class="box"><div id="about-text-display"><p>Ahoj! Jsem správce těchto stránek.</p></div></div>
+        </div>
+        <hr>
+        <div class="table-box"><div id="about-info-display">Záliby: Internet, počítače, hudba</div></div>
+    </div>
+
+    <!-- BLOG -->
+    <div class="page" id="page-blog">
+        <h2>📝 Blog</h2>
+        <div id="blog-posts-container"><p><i>Načítám...</i></p></div>
+    </div>
+
+    <!-- GALERIE -->
+    <div class="page" id="page-gallery">
+        <h2>🖼️ Galerie</h2>
+        <div class="gallery-grid" id="gallery-container"><p><i>Načítám...</i></p></div>
+    </div>
+
+    <!-- ODKAZY -->
+    <div class="page" id="page-links">
+        <h2>🔗 Oblíbené odkazy</h2>
+        <div class="link-box">
+            <h3>🔍 Vyhledávače</h3>
+            <p><a href="https://yahoo.com" target="_blank">Yahoo!</a> — Nejlepší vyhledávač!<br>
+               <a href="#" target="_blank">AltaVista</a> — Skvělý pro obrázky<br>
+               <a href="https://lycos.com" target="_blank">Lycos</a> — Taky dobrý</p>
+        </div>
+        <div class="link-box">
+            <h3>🏠 Hosting zdarma</h3>
+            <p><a href="https://pages.github.com" target="_blank">GitHub Pages</a> — Kde běží tento web!</p>
+        </div>
+        <hr>
+        <div class="box"><p><span class="blink">⭐</span> Chcete výměnu odkazů? Napište do <a onclick="showPage('guestbook')">návštěvní knihy</a>!</p></div>
+    </div>
+
+    <!-- NÁVŠTĚVNÍ KNIHA -->
+    <div class="page" id="page-guestbook">
+        <h2>📖 Návštěvní kniha</h2>
+        <div class="box">
+            <h3>✏️ Zanechte vzkaz:</h3>
+            <table width="100%" cellspacing="5">
+                <tr><td width="70"><b>Jméno:</b></td><td><input class="retro-input" type="text" id="gb-name" placeholder="Vaše jméno" style="width:260px"></td></tr>
+                <tr><td><b>Vzkaz:</b></td><td><textarea class="retro-textarea" id="gb-message" rows="3" style="width:380px"></textarea></td></tr>
+                <tr><td></td><td><button class="retro-btn primary" onclick="addGuestbookEntry()">📨 Odeslat vzkaz</button> <span id="gb-saving" style="display:none;font-size:12px;color:#808080">⏳ Ukládám...</span></td></tr>
+            </table>
+        </div>
+        <hr>
+        <h3>💬 Záznamy:</h3>
+        <div id="guestbook-entries"><p><i>Načítám...</i></p></div>
+    </div>
+
+    <div class="footer">
+        <p>© 1995-2025 Můj Web | Optimalizováno pro rozlišení 640x480</p>
+        <p>Nejlépe zobrazena v Internet Explorer 3.0 nebo Netscape Navigator</p>
+    </div>
+</div>
+
+<!-- ==================== ADMIN ==================== -->
+<div id="admin-overlay">
+    <div id="admin-panel">
+        <div class="admin-titlebar">
+            <span>🔧 Správa webu</span>
+            <button class="admin-close-btn" onclick="closeAdmin()">✕ Zavřít</button>
+        </div>
+
+        <!-- LOGIN -->
+        <div id="admin-login-screen">
+            <h2>🔐 Přihlášení do administrace</h2>
+            <div class="login-box">
+
+                <!-- GitHub setup -->
+                <div id="gh-setup-section">
+                    <div class="gh-info-box">
+                        <b>📋 Jednorázové nastavení GitHub:</b>
+                        <ol>
+                            <li>Jdi na <b>github.com → Settings → Developer settings → Personal access tokens → Tokens (classic)</b></li>
+                            <li>Klikni <b>Generate new token (classic)</b></li>
+                            <li>Zaškrtni <code>repo</code> (celý checkbox)</li>
+                            <li>Generate token → zkopíruj ho</li>
+                        </ol>
+                    </div>
+                    <div class="admin-field">
+                        <label>GitHub uživatelské jméno:</label>
+                        <input type="text" id="gh-owner" placeholder="tvoje-jmeno">
+                    </div>
+                    <div class="admin-field">
+                        <label>Název repozitáře:</label>
+                        <input type="text" id="gh-repo" placeholder="muj-web">
+                    </div>
+                    <div class="admin-field">
+                        <label>Personal Access Token:</label>
+                        <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxx">
+                        <small>Token se uloží jen v tvém prohlížeči (localStorage), nikam se neodesílá.</small>
+                    </div>
+                    <div class="status-msg" id="gh-setup-status"></div>
+                    <button class="retro-btn success" onclick="saveGHConfig()">💾 Uložit &amp; otestovat připojení</button>
+                    <hr>
+                </div>
+
+                <!-- Stav připojení -->
+                <div id="gh-connection-status" style="display:none"></div>
+
+                <div class="admin-field" style="margin-top:12px">
+                    <label>Admin heslo:</label>
+                    <input type="password" id="admin-pass-input" style="width:200px" placeholder="zadejte heslo" onkeydown="if(event.key==='Enter') doLogin()">
+                </div>
+                <button class="retro-btn primary" onclick="doLogin()">🔑 Přihlásit se</button>
+                <p style="font-size:11px;color:#808080;margin-top:8px">Výchozí heslo: <b>admin123</b></p>
+                <div class="status-msg" id="login-err-msg"></div>
+            </div>
+        </div>
+
+        <!-- ADMIN UI -->
+        <div id="admin-ui" style="display:none">
+            <div class="admin-tabs">
+                <div class="admin-tab active" onclick="switchTab(this,'tab-general')">⚙️ Obecné</div>
+                <div class="admin-tab" onclick="switchTab(this,'tab-blog')">📝 Blog</div>
+                <div class="admin-tab" onclick="switchTab(this,'tab-gallery')">🖼️ Galerie</div>
+                <div class="admin-tab" onclick="switchTab(this,'tab-about')">👤 O mně</div>
+                <div class="admin-tab" onclick="switchTab(this,'tab-password')">🔐 Heslo</div>
+                <div class="admin-tab" onclick="switchTab(this,'tab-github')">🐙 GitHub</div>
+            </div>
+            <div class="admin-content">
+
+                <!-- OBECNÉ -->
+                <div class="admin-section active" id="tab-general">
+                    <h3>⚙️ Obecné nastavení</h3>
+                    <div class="admin-field"><label>Název webu:</label><input type="text" id="set-title"></div>
+                    <div class="admin-field"><label>Text pohyblivého pásku:</label><input type="text" id="set-marquee"></div>
+                    <div class="admin-field"><label>Uvítací text:</label><textarea id="set-welcome" rows="3"></textarea></div>
+                    <div class="admin-field"><label>Datum poslední aktualizace:</label><input type="text" id="set-lastupdate"></div>
+                    <div class="status-msg" id="general-status"></div>
+                    <button class="retro-btn primary" onclick="saveGeneral()">💾 Uložit na GitHub</button>
+                    <hr>
+                    <h3>🔢 Počítadlo návštěv</h3>
+                    <p>Aktuální počet: <b id="counter-cur">—</b></p>
+                    <div style="display:flex;gap:8px;align-items:center">
+                        <input type="number" id="set-counter" min="0" style="width:130px;padding:4px;border:2px inset #808080">
+                        <button class="retro-btn" onclick="setCounter()">🔄 Nastavit</button>
+                    </div>
+                </div>
+
+                <!-- BLOG -->
+                <div class="admin-section" id="tab-blog">
+                    <h3>📝 Nový příspěvek</h3>
+                    <div class="admin-field"><label>Nadpis:</label><input type="text" id="post-title" placeholder="Nadpis příspěvku..."></div>
+                    <div class="admin-field"><label>Text:</label><textarea id="post-body" rows="5" placeholder="Text příspěvku..."></textarea></div>
+                    <div class="admin-field">
+                        <label>Obrázek (volitelné — automaticky zmenšen):</label>
+                        <input type="file" id="post-img-file" accept="image/*" onchange="previewImg(this,'post-img-prev')">
+                        <img id="post-img-prev" class="img-preview" alt="náhled">
+                    </div>
+                    <div class="status-msg" id="blog-status"></div>
+                    <button class="retro-btn primary" onclick="addPost()">📤 Přidat na GitHub</button>
+                    <hr>
+                    <h3>📋 Příspěvky</h3>
+                    <div id="admin-post-list"></div>
+                </div>
+
+                <!-- GALERIE -->
+                <div class="admin-section" id="tab-gallery">
+                    <h3>🖼️ Přidat fotku</h3>
+                    <div class="admin-field">
+                        <label>Obrázek (automaticky zmenšen na max 900px):</label>
+                        <input type="file" id="gal-img-file" accept="image/*" onchange="previewImg(this,'gal-img-prev')">
+                        <img id="gal-img-prev" class="img-preview" alt="náhled">
+                    </div>
+                    <div class="admin-field"><label>Popisek (volitelné):</label><input type="text" id="gal-caption" placeholder="Popis fotky..."></div>
+                    <div class="status-msg" id="gallery-status"></div>
+                    <button class="retro-btn primary" onclick="addGalleryPhoto()">📤 Přidat na GitHub</button>
+                    <hr>
+                    <h3>📷 Fotky v galerii</h3>
+                    <div class="admin-gallery-grid" id="admin-gal-grid"></div>
+                </div>
+
+                <!-- O MNĚ -->
+                <div class="admin-section" id="tab-about">
+                    <h3>👤 Stránka O mně</h3>
+                    <div class="admin-field">
+                        <label>Profilová fotka:</label>
+                        <input type="file" id="about-img-file" accept="image/*" onchange="previewImg(this,'about-img-prev')">
+                        <img id="about-img-prev" class="img-preview" alt="náhled">
+                    </div>
+                    <div class="admin-field"><label>Text o sobě:</label><textarea id="about-text-in" rows="5"></textarea></div>
+                    <div class="admin-field"><label>Záliby / info:</label><textarea id="about-info-in" rows="3"></textarea></div>
+                    <div class="status-msg" id="about-status"></div>
+                    <button class="retro-btn primary" onclick="saveAbout()">💾 Uložit na GitHub</button>
+                </div>
+
+                <!-- HESLO -->
+                <div class="admin-section" id="tab-password">
+                    <h3>🔐 Změna hesla</h3>
+                    <div class="admin-field"><label>Staré heslo:</label><input type="password" id="old-pass" style="width:220px"></div>
+                    <div class="admin-field"><label>Nové heslo:</label><input type="password" id="new-pass" style="width:220px"></div>
+                    <div class="admin-field"><label>Nové heslo znovu:</label><input type="password" id="new-pass2" style="width:220px"></div>
+                    <div class="status-msg" id="pass-status"></div>
+                    <button class="retro-btn primary" onclick="changePassword()">🔑 Změnit heslo</button>
+                </div>
+
+                <!-- GITHUB -->
+                <div class="admin-section" id="tab-github">
+                    <h3>🐙 GitHub nastavení</h3>
+                    <div id="gh-tab-status" class="gh-status-box warn" style="display:none"></div>
+                    <div class="admin-field"><label>GitHub uživatelské jméno:</label><input type="text" id="gh-owner-edit"></div>
+                    <div class="admin-field"><label>Název repozitáře:</label><input type="text" id="gh-repo-edit"></div>
+                    <div class="admin-field">
+                        <label>Personal Access Token:</label>
+                        <input type="password" id="gh-token-edit" placeholder="ghp_... (nech prázdné pro zachování)">
+                        <small>Nech prázdné pokud token nechceš měnit.</small>
+                    </div>
+                    <div class="status-msg" id="github-status"></div>
+                    <button class="retro-btn primary" onclick="updateGHConfig()">💾 Uložit</button>
+                    <button class="retro-btn" onclick="testGHConnection()" style="margin-left:8px">🔌 Otestovat připojení</button>
+                    <hr>
+                    <h3>🚀 Inicializace webu</h3>
+                    <p style="font-size:13px">Pokud se JSON soubor nevytvoří automaticky, klikni zde:</p>
+                    <button class="retro-btn success" onclick="forceCreateDataFile()">📄 Vytvořit data/site.json</button>
+                    <div class="status-msg" id="init-status"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// ============================================================
+//  GITHUB CONFIG (localStorage)
+// ============================================================
+let GH = {
+    owner: localStorage.getItem('gh_owner') || '',
+    repo:  localStorage.getItem('gh_repo')  || '',
+    token: localStorage.getItem('gh_token') || ''
+};
+
+function ghConfigured() { return !!(GH.owner && GH.repo && GH.token); }
+function ghSaveLocal() {
+    localStorage.setItem('gh_owner', GH.owner);
+    localStorage.setItem('gh_repo',  GH.repo);
+    localStorage.setItem('gh_token', GH.token);
+}
+
+// ============================================================
+//  DATA
+// ============================================================
+const DATA_PATH = 'data/site.json';
+
+let D = {
+    title:      '⭐ VÍTEJTE NA MÉM WEBU ⭐',
+    marquee:    '🌟 Stránky aktualizovány! 🌟 Nejlepší zobrazení v Netscape Navigator 3.0! 🌟',
+    welcome:    'Vítejte na mých stránkách!\nTady najdete spoustu zajímavého obsahu.',
+    lastUpdate: '—',
+    aboutText:  'Ahoj! Jsem správce těchto stránek.\n\nVítejte na mé osobní stránce!',
+    aboutInfo:  'Záliby: Internet, počítače, hudba',
+    aboutPhoto: '',
+    visitCount: 0,
+    password:   'admin123',
+    guestbook:  [],
+    posts:      [],
+    gallery:    []
+};
+
+let fileSha = null;
+let adminLoggedIn = false;
+let clickCount = 0, clickTimer = null;
+
+// ============================================================
+//  GITHUB API  — bezpečné kódování pro UTF-8
+// ============================================================
+function toB64(str) {
+    // Správně zakóduje UTF-8 znaky (čeština apod.)
+    return btoa(unescape(encodeURIComponent(str)));
+}
+function fromB64(str) {
+    return decodeURIComponent(escape(atob(str.replace(/\n/g,''))));
+}
+
+function ghHeaders() {
+    return {
+        'Authorization': 'token ' + GH.token,
+        'Content-Type':  'application/json',
+        'Accept':        'application/vnd.github.v3+json'
+    };
+}
+
+// Čtení — vždy přes GitHub API s cache-busterem
+async function ghRead() {
+    // ?t=timestamp obejde CDN cache na raw.githubusercontent.com i API
+    const url = `https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${DATA_PATH}?t=${Date.now()}`;
+    const headers = {
+        'Accept': 'application/vnd.github.v3+json',
+        'Cache-Control': 'no-cache'
+    };
+    if (GH.token) headers['Authorization'] = 'token ' + GH.token;
+
+    const resp = await fetch(url, { headers, cache: 'no-store' });
+
+    if (resp.status === 404) {
+        fileSha = null;
+        return null; // soubor ještě neexistuje
+    }
+    if (!resp.ok) {
+        const err = await resp.json().catch(() => ({}));
+        throw new Error('GitHub čtení selhalo: ' + (err.message || 'HTTP ' + resp.status));
+    }
+    const json = await resp.json();
+    fileSha = json.sha;
+    return JSON.parse(fromB64(json.content));
+}
+
+// Zápis — vytvoří nebo aktualizuje soubor
+async function ghWrite(data) {
+    if (!ghConfigured()) throw new Error('GitHub není nakonfigurován!');
+
+    const url  = `https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${DATA_PATH}`;
+    const body = {
+        message: '🔧 Aktualizace webu ' + new Date().toLocaleTimeString('cs-CZ'),
+        content: toB64(JSON.stringify(data, null, 2))
+    };
+    if (fileSha) body.sha = fileSha; // nutné pro update existujícího souboru
+
+    const resp = await fetch(url, {
+        method: 'PUT',
+        headers: ghHeaders(),
+        body: JSON.stringify(body)
+    });
+
+    if (!resp.ok) {
+        const err = await resp.json().catch(() => ({}));
+        // SHA konflikt — načteme znovu a zkusíme
+        if (resp.status === 409 || (err.message && err.message.includes('sha'))) {
+            await ghRead(); // aktualizuje fileSha
+            body.sha = fileSha;
+            const resp2 = await fetch(url, { method: 'PUT', headers: ghHeaders(), body: JSON.stringify(body) });
+            if (!resp2.ok) {
+                const err2 = await resp2.json().catch(() => ({}));
+                throw new Error(err2.message || 'HTTP ' + resp2.status);
+            }
+            const result2 = await resp2.json();
+            fileSha = result2.content.sha;
+            return;
+        }
+        throw new Error(err.message || 'HTTP ' + resp.status);
+    }
+
+    const result = await resp.json();
+    fileSha = result.content.sha;
+}
+
+// ============================================================
+//  LOAD
+// ============================================================
+async function loadAll() {
+    if (!ghConfigured()) {
+        renderAll();
+        return;
+    }
+    showLoading(true);
+    try {
+        const data = await ghRead();
+        if (data) {
+            Object.assign(D, data);
+            // Zvyš počítadlo na pozadí (tiše)
+            D.visitCount = (D.visitCount || 0) + 1;
+            ghWrite(D).catch(e => console.warn('Počítadlo:', e));
+        } else {
+            // Soubor ještě neexistuje — vytvoříme ho
+            console.log('Soubor neexistuje, vytvářím...');
+            await ghWrite(D);
+            console.log('✅ data/site.json vytvořen!');
+        }
+    } catch(e) {
+        console.error('loadAll error:', e);
+    }
+    showLoading(false);
+    renderAll();
+}
+
+// ============================================================
+//  SAVE
+// ============================================================
+async function saveAll(statusId, successMsg) {
+    if (!ghConfigured()) {
+        showStatus(statusId, '❌ GitHub není nakonfigurován! Jdi do záložky 🐙 GitHub.', 'error');
+        return false;
+    }
+    showLoading(true);
+    showStatus(statusId, '⏳ Nahrávám na GitHub...', 'info');
+    try {
+        await ghWrite(D);
+        renderAll();
+        showLoading(false);
+        showStatus(statusId, successMsg || '✅ Uloženo na GitHub!', 'success');
+        return true;
+    } catch(e) {
+        showLoading(false);
+        showStatus(statusId, '❌ Chyba: ' + e.message, 'error');
+        console.error('saveAll error:', e);
+        return false;
+    }
+}
+
+// ============================================================
+//  NAVIGACE
+// ============================================================
+function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.navbar a').forEach(a => a.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    document.getElementById('nav-' + id).classList.add('active');
+}
+
+// ============================================================
+//  RENDER
+// ============================================================
+function renderAll() {
+    document.getElementById('site-title').textContent    = D.title;
+    document.getElementById('marquee-text').textContent  = D.marquee;
+    document.getElementById('visit-counter').textContent = String(D.visitCount).padStart(6, '0');
+    document.getElementById('last-updated-text').textContent = 'Poslední aktualizace: ' + D.lastUpdate;
+
+    document.getElementById('home-welcome-box').innerHTML =
+        '<p><b><span class="blink">NOVÉ!</span></b> ' + esc(D.welcome).replace(/\n/g,'<br>') + '</p>';
+
+    const photoEl = document.getElementById('about-photo-img');
+    if (D.aboutPhoto) { photoEl.src = D.aboutPhoto; photoEl.style.display = 'block'; }
+    else { photoEl.style.display = 'none'; }
+    document.getElementById('about-text-display').innerHTML =
+        D.aboutText.split('\n\n').map(p => '<p>' + esc(p).replace(/\n/g,'<br>') + '</p>').join('');
+    document.getElementById('about-info-display').innerHTML = esc(D.aboutInfo).replace(/\n/g,'<br>');
+
+    const bc = document.getElementById('blog-posts-container');
+    bc.innerHTML = !D.posts.length
+        ? '<p><i>Zatím žádné příspěvky. Přihlas se do administrace a přidej první!</i></p>'
+        : [...D.posts].reverse().map(p => `
+            <div class="blog-post">
+                <div class="blog-post-header">
+                    <span class="post-title">📌 ${esc(p.title)}</span>
+                    <span class="post-date">${p.date}</span>
+                </div>
+                <div class="blog-post-body">
+                    ${p.img ? `<img src="${p.img}" alt="${esc(p.title)}">` : ''}
+                    <p>${esc(p.body).replace(/\n/g,'<br>')}</p>
+                </div>
+            </div>`).join('');
+
+    const hlp = document.getElementById('home-latest-posts');
+    hlp.innerHTML = !D.posts.length ? '<p><i>Žádné příspěvky.</i></p>'
+        : [...D.posts].reverse().slice(0,3).map(p => `
+            <div class="box">
+                <b>📌 ${esc(p.title)}</b> <small style="color:#808080">${p.date}</small>
+                <p>${esc(p.body).substring(0,140)}${p.body.length>140?'…':''}</p>
+                <a onclick="showPage('blog')">Číst dál »</a>
+            </div>`).join('');
+
+    const gc = document.getElementById('gallery-container');
+    gc.innerHTML = !D.gallery.length ? '<p><i>Zatím žádné fotky.</i></p>'
+        : D.gallery.map(item => `
+            <div class="gallery-item">
+                <img src="${item.img}" alt="${esc(item.caption||'')}">
+                <div class="caption">${esc(item.caption||'')}</div>
+            </div>`).join('');
+
+    const gb = document.getElementById('guestbook-entries');
+    gb.innerHTML = !D.guestbook.length ? '<p><i>Zatím žádné záznamy.</i></p>'
+        : [...D.guestbook].reverse().map(e => `
+            <div class="guestbook-entry">
+                <span class="author">${esc(e.author)}</span>
+                <span class="date">| ${e.date}</span>
+                <p>${esc(e.msg).replace(/\n/g,'<br>')}</p>
+            </div>`).join('');
+}
+
+// ============================================================
+//  GUESTBOOK
+// ============================================================
+async function addGuestbookEntry() {
+    const name = document.getElementById('gb-name').value.trim();
+    const msg  = document.getElementById('gb-message').value.trim();
+    if (!name || !msg) { alert('Prosím vyplňte jméno a vzkaz!'); return; }
+    if (!ghConfigured()) { alert('Web není připojen k GitHubu.'); return; }
+
+    const date = new Date().toLocaleDateString('cs-CZ',{day:'numeric',month:'long',year:'numeric'});
+    D.guestbook.push({ author: name, date, msg });
+    document.getElementById('gb-name').value    = '';
+    document.getElementById('gb-message').value = '';
+
+    const ind = document.getElementById('gb-saving');
+    ind.style.display = 'inline';
+    try {
+        await ghWrite(D);
+        ind.style.display = 'none';
+        renderAll();
+        alert('Váš vzkaz byl přidán! Děkuji! 😊');
+    } catch(e) {
+        ind.style.display = 'none';
+        D.guestbook.pop();
+        alert('Chyba při ukládání: ' + e.message);
+    }
+}
+
+// ============================================================
+//  ADMIN PŘÍSTUP
+// ============================================================
+document.getElementById('site-title').addEventListener('click', () => {
+    clickCount++;
+    clearTimeout(clickTimer);
+    clickTimer = setTimeout(() => { clickCount = 0; }, 700);
+    if (clickCount >= 3) { clickCount = 0; openAdmin(); }
+});
+
+function openAdmin() {
+    document.getElementById('admin-overlay').style.display = 'block';
+    const configured = ghConfigured();
+    document.getElementById('gh-setup-section').style.display = configured ? 'none' : 'block';
+
+    const connStatus = document.getElementById('gh-connection-status');
+    if (configured) {
+        connStatus.style.display = 'block';
+        connStatus.className = 'gh-status-box ok';
+        connStatus.textContent = '✅ GitHub připojen: ' + GH.owner + '/' + GH.repo;
+    } else {
+        connStatus.style.display = 'none';
+    }
+
+    document.getElementById('admin-login-screen').style.display = adminLoggedIn ? 'none' : 'block';
+    document.getElementById('admin-ui').style.display = adminLoggedIn ? 'block' : 'none';
+    if (adminLoggedIn) loadAdminFields();
+}
+
+function closeAdmin() { document.getElementById('admin-overlay').style.display = 'none'; }
+document.getElementById('admin-overlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('admin-overlay')) closeAdmin();
+});
+
+// ============================================================
+//  GITHUB CONFIG
+// ============================================================
+async function saveGHConfig() {
+    const owner = document.getElementById('gh-owner').value.trim();
+    const repo  = document.getElementById('gh-repo').value.trim();
+    const token = document.getElementById('gh-token').value.trim();
+    if (!owner || !repo || !token) {
+        showStatus('gh-setup-status','❌ Vyplňte všechna tři pole!','error'); return;
+    }
+    GH = { owner, repo, token };
+    ghSaveLocal();
+    showStatus('gh-setup-status','⏳ Testuji připojení k GitHubu...','info');
+
+    try {
+        // Test přístupu k repozitáři
+        const resp = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { headers: ghHeaders() });
+        if (!resp.ok) {
+            const err = await resp.json().catch(() => ({}));
+            throw new Error(err.message || 'HTTP ' + resp.status);
+        }
+
+        showStatus('gh-setup-status','✅ Připojení OK! Načítám data...','success');
+
+        // Načti nebo vytvoř data
+        await loadAll();
+
+        // Skryj setup, zobraz status
+        document.getElementById('gh-setup-section').style.display = 'none';
+        const connStatus = document.getElementById('gh-connection-status');
+        connStatus.style.display = 'block';
+        connStatus.className = 'gh-status-box ok';
+        connStatus.textContent = '✅ GitHub připojen: ' + owner + '/' + repo;
+
+    } catch(e) {
+        showStatus('gh-setup-status','❌ Chyba: ' + e.message + ' — zkontroluj jméno, repozitář a token.','error');
+    }
+}
+
+async function updateGHConfig() {
+    const owner = document.getElementById('gh-owner-edit').value.trim();
+    const repo  = document.getElementById('gh-repo-edit').value.trim();
+    const token = document.getElementById('gh-token-edit').value.trim() || GH.token;
+    if (!owner || !repo) { showStatus('github-status','❌ Vyplňte jméno a repozitář!','error'); return; }
+    GH = { owner, repo, token };
+    ghSaveLocal();
+    document.getElementById('gh-token-edit').value = '';
+    showStatus('github-status','✅ Nastavení uloženo!','success');
+}
+
+async function testGHConnection() {
+    showStatus('github-status','⏳ Testuji...','info');
+    try {
+        const resp = await fetch(`https://api.github.com/repos/${GH.owner}/${GH.repo}`, { headers: ghHeaders() });
+        if (resp.ok) {
+            const data = await resp.json();
+            showStatus('github-status','✅ OK! Repozitář: ' + data.full_name + ' | Viditelnost: ' + (data.private ? 'Soukromý' : 'Veřejný'),'success');
+        } else {
+            const err = await resp.json().catch(() => ({}));
+            showStatus('github-status','❌ ' + (err.message || 'HTTP ' + resp.status),'error');
+        }
+    } catch(e) {
+        showStatus('github-status','❌ ' + e.message,'error');
+    }
+}
+
+async function forceCreateDataFile() {
+    showStatus('init-status','⏳ Vytvářím data/site.json...','info');
+    try {
+        fileSha = null; // Resetuj SHA — chceme vytvořit nový soubor
+        // Zkus načíst aktuální SHA (pokud soubor existuje)
+        try { await ghRead(); } catch(e) {}
+        await ghWrite(D);
+        showStatus('init-status','✅ Soubor data/site.json byl úspěšně vytvořen na GitHubu!','success');
+    } catch(e) {
+        showStatus('init-status','❌ Chyba: ' + e.message,'error');
+    }
+}
+
+// ============================================================
+//  PŘIHLÁŠENÍ
+// ============================================================
+function doLogin() {
+    const input = document.getElementById('admin-pass-input').value;
+    if (input === D.password) {
+        adminLoggedIn = true;
+        document.getElementById('admin-pass-input').value = '';
+        document.getElementById('admin-login-screen').style.display = 'none';
+        document.getElementById('admin-ui').style.display = 'block';
+        loadAdminFields();
+    } else {
+        showStatus('login-err-msg','❌ Špatné heslo!','error');
+    }
+}
+
+// ============================================================
+//  ZÁLOŽKY
+// ============================================================
+function switchTab(el, tabId) {
+    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+    if (tabId === 'tab-github') {
+        document.getElementById('gh-owner-edit').value = GH.owner;
+        document.getElementById('gh-repo-edit').value  = GH.repo;
+        const box = document.getElementById('gh-tab-status');
+        if (ghConfigured()) {
+            box.style.display = 'block';
+            box.className = 'gh-status-box ok';
+            box.textContent = '✅ Připojeno: ' + GH.owner + '/' + GH.repo;
+        } else {
+            box.style.display = 'block';
+            box.className = 'gh-status-box err';
+            box.textContent = '❌ GitHub není nakonfigurován';
+        }
+    }
+}
+
+function loadAdminFields() {
+    document.getElementById('set-title').value      = D.title;
+    document.getElementById('set-marquee').value    = D.marquee;
+    document.getElementById('set-welcome').value    = D.welcome;
+    document.getElementById('set-lastupdate').value = D.lastUpdate;
+    document.getElementById('counter-cur').textContent = D.visitCount;
+    document.getElementById('set-counter').value    = D.visitCount;
+    document.getElementById('about-text-in').value  = D.aboutText;
+    document.getElementById('about-info-in').value  = D.aboutInfo;
+    renderAdminPosts();
+    renderAdminGallery();
+}
+
+// ============================================================
+//  OBECNÉ
+// ============================================================
+async function saveGeneral() {
+    D.title      = document.getElementById('set-title').value.trim()      || D.title;
+    D.marquee    = document.getElementById('set-marquee').value.trim()    || D.marquee;
+    D.welcome    = document.getElementById('set-welcome').value.trim()    || D.welcome;
+    D.lastUpdate = document.getElementById('set-lastupdate').value.trim() || D.lastUpdate;
+    await saveAll('general-status','✅ Nastavení uloženo na GitHub!');
+}
+
+async function setCounter() {
+    D.visitCount = parseInt(document.getElementById('set-counter').value) || 0;
+    document.getElementById('counter-cur').textContent = D.visitCount;
+    await saveAll('general-status','✅ Počítadlo nastaveno!');
+}
+
+// ============================================================
+//  BLOG
+// ============================================================
+async function addPost() {
+    const title = document.getElementById('post-title').value.trim();
+    const body  = document.getElementById('post-body').value.trim();
+    if (!title || !body) { showStatus('blog-status','❌ Vyplňte nadpis a text!','error'); return; }
+
+    const date = new Date().toLocaleDateString('cs-CZ',{day:'numeric',month:'long',year:'numeric'});
+    const post = { id: Date.now(), title, body, date, img: '' };
+
+    const f = document.getElementById('post-img-file');
+    if (f.files && f.files[0]) {
+        showStatus('blog-status','⏳ Zpracovávám obrázek...','info');
+        post.img = await resizeImage(f.files[0], 900, 0.75);
+    }
+
+    D.posts.push(post);
+    const ok = await saveAll('blog-status','✅ Příspěvek přidán na GitHub!');
+    if (ok) {
+        document.getElementById('post-title').value = '';
+        document.getElementById('post-body').value  = '';
+        f.value = '';
+        document.getElementById('post-img-prev').style.display = 'none';
+        renderAdminPosts();
+    } else {
+        D.posts.pop();
+    }
+}
+
+function deletePost(id) {
+    if (!confirm('Smazat tento příspěvek?')) return;
+    D.posts = D.posts.filter(p => p.id !== id);
+    saveAll('blog-status','✅ Smazáno!');
+    renderAdminPosts();
+}
+
+function renderAdminPosts() {
+    const c = document.getElementById('admin-post-list');
+    if (!D.posts.length) { c.innerHTML = '<i>Žádné příspěvky.</i>'; return; }
+    c.innerHTML = [...D.posts].reverse().map(p => `
+        <div class="admin-post-item">
+            <div class="post-info"><b>${esc(p.title)}</b> <small style="color:#808080">${p.date}</small><br><small>${esc(p.body.substring(0,80))}…</small></div>
+            <button class="retro-btn danger" onclick="deletePost(${p.id})">🗑️ Smazat</button>
+        </div>`).join('');
+}
+
+// ============================================================
+//  GALERIE
+// ============================================================
+async function addGalleryPhoto() {
+    const f = document.getElementById('gal-img-file');
+    if (!f.files || !f.files[0]) { showStatus('gallery-status','❌ Vyberte obrázek!','error'); return; }
+    showStatus('gallery-status','⏳ Zpracovávám obrázek...','info');
+    const item = { id: Date.now(), img: await resizeImage(f.files[0], 900, 0.75), caption: document.getElementById('gal-caption').value.trim() };
+    D.gallery.push(item);
+    const ok = await saveAll('gallery-status','✅ Fotka přidána na GitHub!');
+    if (ok) {
+        f.value = '';
+        document.getElementById('gal-caption').value = '';
+        document.getElementById('gal-img-prev').style.display = 'none';
+        renderAdminGallery();
+    } else {
+        D.gallery.pop();
+    }
+}
+
+function deleteGalleryItem(id) {
+    if (!confirm('Smazat tuto fotku?')) return;
+    D.gallery = D.gallery.filter(g => g.id !== id);
+    saveAll('gallery-status','✅ Fotka smazána!');
+    renderAdminGallery();
+}
+
+function renderAdminGallery() {
+    const c = document.getElementById('admin-gal-grid');
+    if (!D.gallery.length) { c.innerHTML = '<i>Žádné fotky.</i>'; return; }
+    c.innerHTML = D.gallery.map(item => `
+        <div class="admin-gallery-item">
+            <img src="${item.img}" alt="${esc(item.caption||'')}">
+            <div style="font-size:10px;margin:3px 0">${esc(item.caption||'—')}</div>
+            <button class="retro-btn danger" style="font-size:11px;padding:2px 6px" onclick="deleteGalleryItem(${item.id})">🗑️</button>
+        </div>`).join('');
+}
+
+// ============================================================
+//  O MNĚ
+// ============================================================
+async function saveAbout() {
+    D.aboutText = document.getElementById('about-text-in').value.trim() || D.aboutText;
+    D.aboutInfo = document.getElementById('about-info-in').value.trim() || D.aboutInfo;
+    const f = document.getElementById('about-img-file');
+    if (f.files && f.files[0]) {
+        showStatus('about-status','⏳ Zpracovávám fotku...','info');
+        D.aboutPhoto = await resizeImage(f.files[0], 400, 0.8);
+        f.value = '';
+        document.getElementById('about-img-prev').style.display = 'none';
+    }
+    await saveAll('about-status','✅ Uloženo na GitHub!');
+}
+
+// ============================================================
+//  HESLO
+// ============================================================
+async function changePassword() {
+    const old = document.getElementById('old-pass').value;
+    const nw  = document.getElementById('new-pass').value;
+    const nw2 = document.getElementById('new-pass2').value;
+    if (old !== D.password) { showStatus('pass-status','❌ Staré heslo je špatně!','error'); return; }
+    if (!nw)                { showStatus('pass-status','❌ Zadejte nové heslo!','error'); return; }
+    if (nw !== nw2)         { showStatus('pass-status','❌ Hesla se neshodují!','error'); return; }
+    D.password = nw;
+    await saveAll('pass-status','✅ Heslo změněno!');
+    ['old-pass','new-pass','new-pass2'].forEach(id => document.getElementById(id).value = '');
+}
+
+// ============================================================
+//  HELPERS
+// ============================================================
+function esc(t) {
+    const d = document.createElement('div');
+    d.appendChild(document.createTextNode(t || ''));
+    return d.innerHTML;
+}
+
+function previewImg(input, previewId) {
+    if (input.files && input.files[0]) {
+        const r = new FileReader();
+        r.onload = e => { const el = document.getElementById(previewId); el.src = e.target.result; el.style.display = 'block'; };
+        r.readAsDataURL(input.files[0]);
+    }
+}
+
+function resizeImage(file, maxPx, quality) {
+    return new Promise(resolve => {
+        const reader = new FileReader();
+        reader.onload = e => {
+            const img = new Image();
+            img.onload = () => {
+                let w = img.width, h = img.height;
+                if (w > maxPx || h > maxPx) {
+                    if (w > h) { h = Math.round(h * maxPx / w); w = maxPx; }
+                    else       { w = Math.round(w * maxPx / h); h = maxPx; }
+                }
+                const canvas = document.createElement('canvas');
+                canvas.width = w; canvas.height = h;
+                canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                resolve(canvas.toDataURL('image/jpeg', quality));
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function showStatus(id, msg, type) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = msg;
+    el.className = 'status-msg ' + type;
+    el.style.display = 'block';
+    if (type !== 'info') setTimeout(() => { el.style.display = 'none'; }, 5000);
+}
+
+function showLoading(show) {
+    document.getElementById('loading-bar').style.display = show ? 'block' : 'none';
+}
+
+// ============================================================
+//  START
+// ============================================================
+loadAll();
+</script>
+</body>
+</html>
