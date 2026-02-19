@@ -9,14 +9,6 @@
   "visitCount": 0,
   "password": "abcd",
   "guestbook": [],
-  "posts": [
-    {
-      "id": 1771509442476,
-      "title": "Test",
-      "body": "She them tiddies",
-      "date": "19. února 2026",
-      "img": ""
-    }
-  ],
+  "posts": [],
   "gallery": []
 }
