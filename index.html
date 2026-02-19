@@ -394,9 +394,9 @@
 //  GITHUB CONFIG (localStorage)
 // ============================================================
 let GH = {
-    owner: localStorage.getItem('gh_owner') || '',
-    repo:  localStorage.getItem('gh_repo')  || '',
-    token: localStorage.getItem('gh_token') || ''
+    owner: localStorage.getItem('gh_owner') || 'Mirejn',
+    repo:  localStorage.getItem('gh_repo')  || 'MiroslavCvejn',
+    token: localStorage.getItem('gh_token') || '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'
 };
 
 function ghConfigured() { return !!(GH.owner && GH.repo && GH.token); }
